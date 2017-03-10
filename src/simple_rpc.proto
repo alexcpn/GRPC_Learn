@@ -1,0 +1,42 @@
+//Test RPC
+
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.generated";
+option java_outer_classname = "SimpleServiceProto";
+option objc_class_prefix = "RTG";
+
+package simpleservice;
+
+// Interface exported by the server.
+service SimpleService {
+  // A simple RPC.
+
+// Simple Request that takes a string and returns a string
+// to show both blockng and non blocking - async calls;
+//In the server implementation the implementation of this is made blocking to illustrate
+ rpc getData(InputMessage) returns (OutputMessage) {}
+
+  // A server-to-client streaming RPC.
+  rpc getDataStream(InputMessageRange) returns (stream OutputMessage) {}
+
+}
+
+//Simple input message.
+message InputMessage {
+  string in_message = 1;
+}
+
+//Simple input message.
+message OutputMessage {
+  string out_message = 1;
+}
+
+//Composite message
+message InputMessageRange {
+  // One corner of the rectangle.
+  int32 messageStart = 1;
+  int32 messageEnd = 2;
+
+}
