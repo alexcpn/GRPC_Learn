@@ -35,6 +35,11 @@ add_custom_command(
 add_custom_target(run ALL
     DEPENDS "${PROTO_FILE_NAME}.grpc.pb.h")    
 
+set(OUT_FILES
+		"${PROTO_FILE_NAME}.pb.cc"
+            "${PROTO_FILE_NAME}.pb.h"
+            "${PROTO_FILE_NAME}.grpc.pb.h"
+            "${PROTO_FILE_NAME}.grpc.pb.cc")
 
 set (GENERATED_PROTOBUF_FILES
             "${GENERATED_PROTOBUF_PATH}/${PROTO_FILE_NAME}.pb.cc"
@@ -42,15 +47,19 @@ set (GENERATED_PROTOBUF_FILES
             "${GENERATED_PROTOBUF_PATH}/${PROTO_FILE_NAME}.grpc.pb.h"
             "${GENERATED_PROTOBUF_PATH}/${PROTO_FILE_NAME}.grpc.pb.cc"
 )
+add_custom_target(vsphere_header ALL  DEPENDS ${OUT_FILES})  #Targer name curtsey SO
 
+set_source_files_properties(${GENERATED_PROTOBUF_FILES}
+                            PROPERTIES GENERATED TRUE)
+							
 include_directories(/usr/local/include)
 link_directories(/usr/local/lib)
 include_directories(${GENERATED_PROTOBUF_PATH})
 include_directories(${Protobuf_INCLUDE})
 link_libraries(grpc++_unsecure grpc ${PROTOBUF_LIBRARY})
 
-add_executable(TestGrpcServer simple_server.cpp)
-add_executable(TestGrpcClient simple_client.cpp)
+add_executable(TestGrpcServer simple_server.cpp ${GENERATED_PROTOBUF_FILES})
+add_executable(TestGrpcClient simple_client.cpp ${GENERATED_PROTOBUF_FILES})
 
-target_link_libraries(TestGrpcServer ${GENERATED_PROTOBUF_FILES})
-target_link_libraries(TestGrpcClient ${GENERATED_PROTOBUF_FILES})
+add_dependencies(TestGrpcServer vsphere_header)
+add_dependencies(TestGrpcClient vsphere_header)

@@ -7,7 +7,7 @@ option java_package = "io.grpc.generated";
 option java_outer_classname = "SimpleServiceProto";
 option objc_class_prefix = "RTG";
 
-package simpleservice;
+package simpleservice.nokia;
 
 // Interface exported by the server.
 service SimpleService {

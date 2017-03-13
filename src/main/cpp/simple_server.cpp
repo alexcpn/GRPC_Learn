@@ -5,7 +5,7 @@
 
 using namespace grpc;
 using namespace std;
-using namespace simpleservice;
+using namespace simpleservice::nokia;
 
 class SimpleServer final : public SimpleService::Service {
 
